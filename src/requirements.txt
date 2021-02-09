@@ -1,0 +1,3 @@
+LyricsGenius
+python-dotenv
+pika
