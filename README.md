@@ -59,6 +59,6 @@ The tests can be accessed on the `test` folder. Test list:
 - [x] Check the RabbitMQ connection
 - [x] Create a RabbitMQ channel
 - [x] Send a music to find the lyrics
-- [x] Check if the file with the lyrics exists
+- [ ] Check if the file with the lyrics exists (returns 403, only works locally)
 - [ ] Check the hash of the received file 
 - [ ] Check the RabbitMQ response and compare it to the expected one (commented, only works locally)

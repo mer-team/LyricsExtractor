@@ -78,18 +78,18 @@ describe('Testing RabbitMQ', ()=>{
     });
   });
 
-  it('Should get the lyrics file', function(done) {
-    setTimeout(function(){
-      fs.access(`${GITHUB_WORKSPACE}/test/JiF3pbvR5G0/${file}`, fs.F_OK, (err) => {
-        if (err) {
-          console.error(err)
-          console.log("File not found!");
-          return
-        }
-        console.log("File found!");
-        done();
-      })}, 4000);
-  });
+  // it('Should get the lyrics file', function(done) {
+  //   setTimeout(function(){
+  //     fs.access(`${GITHUB_WORKSPACE}/test/JiF3pbvR5G0/${file}`, fs.F_OK, (err) => {
+  //       if (err) {
+  //         console.error(err)
+  //         console.log("File not found!");
+  //         return
+  //       }
+  //       console.log("File found!");
+  //       done();
+  //     })}, 4000);
+  // });
 
   // it("Should receive the genre from RabbitMQ", (done)=>{
   //   amqp.connect(config, (err, conn)=>{
