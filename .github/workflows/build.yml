@@ -36,7 +36,7 @@ jobs:
     #    image-name: lyricsextractor:local
 
     - name: Run Local LyricsExtractor Docker Image
-      run: docker run -d -e TIME=10 -e USER=$MQUSER -e PASS=$MQPASS -e HOST=$MQHOST -e PORT=$PORT -e MNG_PORT=$MNG_PORT -e GENIUS_KEY=${{ secrets.GENIUS_KEY }} --net=host -v "$GITHUB_WORKSPACE/test:/Audios" lyricsextractor:local
+      run: docker run -d -e TIME=10 -e USER=$MQUSER -e PASS=$MQPASS -e HOST=$MQHOST -e PORT=$MQPORT -e MNG_PORT=$MNG_PORT -e GENIUS_KEY=${{ secrets.GENIUS_KEY }} --net=host -v "$GITHUB_WORKSPACE/test:/Audios" lyricsextractor:local
 
     - name: Use Node.js 14
       uses: actions/setup-node@v2
