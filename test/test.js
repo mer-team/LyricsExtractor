@@ -88,7 +88,7 @@ describe('Testing RabbitMQ', ()=>{
         }
         console.log("File found!");
         done();
-      })}, 6000);
+      })}, 4000);
   });
 
   // it("Should receive the genre from RabbitMQ", (done)=>{
