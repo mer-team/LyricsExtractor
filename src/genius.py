@@ -1,5 +1,6 @@
 # https://lyricsgenius.readthedocs.io/en/master/
 import lyricsgenius as lg
+from pathlib import Path
 import os
 import pika
 import json
@@ -7,12 +8,17 @@ import json
 from dotenv import load_dotenv
 load_dotenv()
 
-connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+mqhost = os.environ.get("HOST")
+mquser = os.environ.get("USER")
+mqpass = os.environ.get("PASS")
+mqport = os.environ.get("PORT")
+API_KEY=os.environ.get("GENIUS_KEY")
+
+credentials =  pika.PlainCredentials(mquser, mqpass)
+connection = pika.BlockingConnection(pika.ConnectionParameters(mqhost, mqport,'/',credentials))
 channel = connection.channel()
 
 channel.queue_declare(queue='lyrics')
-
-API_KEY=os.environ.get("GENIUS_KEY")
 
 genius = lg.Genius(API_KEY,
                     skip_non_songs=True,
@@ -29,11 +35,17 @@ def callback(ch, method, properties, body):
         song = None
 
     if song != None:
-        s = song.save_lyrics(filename=info['song'], extension='txt', overwrite='true')
-        filename = info['song'] + ".txt"
+        s = song.save_lyrics(filename=info['vID'], extension='txt', overwrite='true')
+        filename = info['vID'] + ".txt"
+
+        # create path if doesn't exist
+        Path("/Audios/" + info['vID']).mkdir(parents=True, exist_ok=True)
+        # sets the filename to the vID and save it to the vID dir
+        os.rename("./" + filename, "/Audios/" + info['vID'] + "/" + filename)
+
         msg = {
             "Service": "LyricsExtractor",
-            "Result": { "Filename": filename }
+            "Result": { "vID": info['vID'], "Filename": filename }
         }
 
         channel.basic_publish(exchange='',
@@ -43,7 +55,7 @@ def callback(ch, method, properties, body):
     else:
         msg = {
             "Service": "LyricsExtractor",
-            "Result": { "Filename": "Music Not Found" }
+            "Result": { "vID": info['vID'], "Filename": "Music Not Found" }
         }
         channel.basic_publish(exchange='',
                         routing_key='management',
