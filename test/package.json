@@ -1,0 +1,23 @@
+{
+  "name": "lyricsextractor-test",
+  "version": "1.0.0",
+  "description": "Lyrics Extractor Test",
+  "main": "mocha test --timeout 5000",
+  "scripts": {
+    "test": "mocha test --timeout 5000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mer-team/LyricsExtractor.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mer-team/LyricsExtractor/issues"
+  },
+  "homepage": "https://github.com/mer-team/LyricsExtractor#readme",
+  "devDependencies": {
+    "amqplib": "^0.6.0",
+    "mocha": "^8.4.0"
+  }
+}
