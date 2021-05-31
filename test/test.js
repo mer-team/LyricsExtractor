@@ -80,7 +80,7 @@ describe('Testing RabbitMQ', ()=>{
 
   it('Should split the music', function(done) {
     setTimeout(function(){
-      fs.access(`${GITHUB_WORKSPACE}/JiF3pbvR5G0/${file}`, fs.F_OK, (err) => {
+      fs.access(`${GITHUB_WORKSPACE}/test/JiF3pbvR5G0/${file}`, fs.F_OK, (err) => {
         if (err) {
           console.error(err)
           console.log("File not found!");
