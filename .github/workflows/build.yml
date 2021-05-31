@@ -1,0 +1,56 @@
+name: LyricsExtractor Node.js CI/CD
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Build LyricsExtractor and run tests
+    runs-on: ubuntu-latest
+
+    env:
+      MQHOST: localhost
+      MQUSER: merUser
+      MQPASS: passwordMER
+      MQPORT: 5672
+      MNG_PORT: 15672
+
+    steps:    
+    - name: Setup RabbitMQ Image
+      uses: mer-team/rabbitmq-mng-action@v1.2
+      with:
+        RABBITMQ_USER: $MQUSER
+        RABBITMQ_PASS: $MQPASS
+        RABBITMQ_PORT: $MQPORT
+        RABBITMQ_MNG_PORT: $MNG_PORT
+        RABBITMQ_TAG: '3-management-alpine'
+
+    - name: Checkout LyricsExtractor Project
+      uses: actions/checkout@v2
+    
+    - name: Build Local Manager Docker Image
+      run: docker build -t lyricsextractor:local .
+
+    #- name: Container Image Scan
+    #  uses: azure/container-scan@v0
+    #  with:
+    #    image-name: lyricsextractor:local
+
+    - name: Run Local LyricsExtractor Docker Image
+      run: docker run -d -e TIME=10 -e USER=$MQUSER -e PASS=$MQPASS -e HOST=$MQHOST -e MNG_PORT=$MNG_PORT -e GENIUS_KEY=${{ secrets.GENIUS_KEY }} --net=host -v "$GITHUB_WORKSPACE/test:/Audios" lyricsextractor:local
+
+    - name: Use Node.js 14
+      uses: actions/setup-node@v2
+      with:
+        node-version: '14'
+
+    - name: Install dependencies
+      run: npm install --also=dev
+      working-directory: test
+
+    - name: Run Tests
+      run: npm test
+      working-directory: test
+
+    - name: Dump docker logs on failure
+      if: failure()
+      uses: jwalton/gh-docker-logs@v1
